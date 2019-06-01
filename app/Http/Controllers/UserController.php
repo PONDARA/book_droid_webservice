@@ -51,7 +51,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email'=> $request->email,
             'phone_number'=> $request->phone_number,
-            'password' => $request->password,
+            'password' => encrypt($request->password),
           ]);
           $result = array('status'=>'successful');
         return response()->json(($result));
@@ -83,7 +83,7 @@ class UserController extends Controller
         $email = DB::table('users')->where('email', $request->email);
         // dd($email->get());
         foreach ($email->get() as $key) {
-            if ($password == $key->password) {
+            if ($password == decrypt($key->password)) {
                 $result = array('status'=>'logedin');
                 return response()->json(($result));
             }else{
